@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thiệp Yêu Thương</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffcce0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .envelope-container {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      position: relative;
+      z-index: 2;
+    }
+
+    .envelope-container.open .envelope {
+      transform: rotateX(180deg);
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      backface-visibility: hidden;
+    }
+
+    .front {
+      background: #fff0f5;
+      border: 2px solid #ff80aa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 50px;
+    }
+
+    .back {
+      background: white;
+      transform: rotateX(180deg);
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 2px solid #ff80aa;
+    }
+
+    .back img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .heart {
+      font-size: 40px;
+      color: #ff3366;
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* Trái tim nổ */
+    .burst {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 24px;
+      color: #ff66a3;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .envelope-container.open .burst {
+      animation: burstAnim 0.8s ease-out forwards;
+    }
+
+    @keyframes burstAnim {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -120px) scale(2); }
+    }
+
+    .burst:nth-child(2) { transform: rotate(0deg); }
+    .burst:nth-child(3) { transform: rotate(45deg); }
+    .burst:nth-child(4) { transform: rotate(90deg); }
+    .burst:nth-child(5) { transform: rotate(135deg); }
+    .burst:nth-child(6) { transform: rotate(180deg); }
+
+    /* Cánh hoa bay */
+    .petal {
+      position: fixed;
+      top: -50px;
+      font-size: 20px;
+      color: pink;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    /* Pháo hoa */
+    .firework {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: gold;
+      border-radius: 50%;
+      animation: explode 0.8s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(10); }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="music" src="HomeSweetHome-GDragonTaeyangDaesung-16797879.mp3"></audio> <!-- 🔊 Thay nhạc tại đây -->
+
+  <div class="envelope-container" onclick="openCard(this)">
+    <div class="envelope">
+      <div class="front">✉️</div>
+      <div class="back">
+        <img src="templs.jpg" alt="Avatar"> <!-- 🖼️ Thay ảnh tại đây -->
+        <div class="heart">❤️</div>
+        <h1>Kính Mời!</h1>
+        <p>Xin mời phú bà Hồ Thanh Nguyên <br>
+            Đến Dự buổi BBQ của tôi!</p>
+        <p>chân thành cảm ơn!</p>
+      </div>
+    </div>
+
+    <!-- Trái tim bùng nổ -->
+    <div class="burst">💖</div>
+    <div class="burst">💖</div>
+    <div class="burst">💖</div>
+    <div class="burst">💖</div>
+    <div class="burst">💖</div>
+  </div>
+
+  <!-- 🌸 Cánh hoa bay -->
+  <script>
+    // tạo hoa rơi
+    for(let i = 0; i < 30; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.innerText = '🌸';
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(petal);
+    }
+
+    // mở thư: nhạc + pháo hoa
+    function openCard(el) {
+      el.classList.toggle('open');
+      document.getElementById('music').play();
+
+      // tạo pháo hoa nhỏ
+      for (let i = 0; i < 5; i++) {
+        const fw = document.createElement('div');
+        fw.className = 'firework';
+        fw.style.left = 150 + Math.random() * 40 + 'px';
+        fw.style.top = 100 + Math.random() * 30 + 'px';
+        fw.style.background = ['#ff0', '#f0f', '#0ff', '#f90'][i % 4];
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }
+  </script>
+</body>
+</html>
